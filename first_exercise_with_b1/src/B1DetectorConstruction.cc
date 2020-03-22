@@ -119,12 +119,12 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct()
   // Shifter
   //  
   G4Material* shifter_mat = nist->FindOrBuildMaterial("G4_A-150_TISSUE");
-  G4ThreeVector pos_shifter = G4ThreeVector(0, 0, -7*cm);
+  G4ThreeVector pos_shifter = G4ThreeVector(0, 0, (14/2)*cm);
         
   // Conical section for shifter       
-  G4double shifter_rmina =  0.*cm, shifter_rmaxa = (6+43/3.)*cm;
-  G4double shifter_rminb =  0.*cm, shifter_rmaxb = 25.*cm;
-  G4double shifter_hz = 14.*cm;
+  G4double shifter_rmina =  0.*cm, shifter_rmaxb = (6+43/3.)*cm;
+  G4double shifter_rminb =  0.*cm, shifter_rmaxa = 25.*cm;
+  G4double shifter_hz = (14/2)*cm;
   G4double shifter_phimin = 0.*deg, shifter_phimax = 360.*deg;
   G4Cons* solidShifter =    
     new G4Cons("Shifter", 
@@ -178,12 +178,12 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct()
   // Fast_Neutron_Filter
   //  
   G4Material* fnfilter_mat = nist->FindOrBuildMaterial("G4_A-150_TISSUE");
-  G4ThreeVector pos_fnfilter = G4ThreeVector(0, 0, -29*cm);
+  G4ThreeVector pos_fnfilter = G4ThreeVector(0, 0, (14+30/2)*cm);
         
   // Conical section for fast neutron filter       
-  G4double fnfilter_rmina =  0.*cm, fnfilter_rmaxa = (6+13/3.)*cm;
-  G4double fnfilter_rminb =  0.*cm, fnfilter_rmaxb = (6+43/3.)*cm;
-  G4double fnfilter_hz = 30.*cm;
+  G4double fnfilter_rmina =  0.*cm, fnfilter_rmaxb = (6+13/3.)*cm;
+  G4double fnfilter_rminb =  0.*cm, fnfilter_rmaxa = (6+43/3.)*cm;
+  G4double fnfilter_hz = (30/2)*cm;
   G4double fnfilter_phimin = 0.*deg, fnfilter_phimax = 360.*deg;
   G4Cons* solidFnfilter =    
     new G4Cons("Fnfilter", 
@@ -199,6 +199,68 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct()
                     pos_fnfilter,                    //at position
                     logicFnfilter,             //its logical volume
                     "Fnfilter",                //its name
+                    logicWorld,                //its mother  volume
+                    false,                   //no boolean operation
+                    0,                       //copy number
+                    checkOverlaps);          //overlaps checking
+
+
+// Gamma_Ray_Sheilding
+  //  
+  G4Material* grshielding_mat = nist->FindOrBuildMaterial("G4_A-150_TISSUE");
+  G4ThreeVector pos_grshielding = G4ThreeVector(0, 0, (14+30+3.5/2)*cm);
+        
+  // Conical section for Gamma_Ray_Sheilding       
+  G4double grshielding_rmina =  0.*cm, grshielding_rmaxa = (6+13/3.)*cm;
+  G4double grshielding_rminb =  0.*cm, grshielding_rmaxb = (6+9.5/3.)*cm;
+  G4double grshielding_hz = (3.5/2)*cm;
+  G4double grshielding_phimin = 0.*deg, grshielding_phimax = 360.*deg;
+  G4Cons* solidGrshielding =    
+    new G4Cons("Grshielding", 
+    grshielding_rmina, grshielding_rmaxa, grshielding_rminb, grshielding_rmaxb, grshielding_hz,
+    grshielding_phimin, grshielding_phimax);
+                      
+  G4LogicalVolume* logicGrshielding =                         
+    new G4LogicalVolume(solidGrshielding,         //its solid
+                        grshielding_mat,          //its material
+                        "Grshielding");           //its name
+
+  new G4PVPlacement(0,                       //no rotation
+                    pos_grshielding,                    //at position
+                    logicGrshielding,             //its logical volume
+                    "Grshielding",                //its name
+                    logicWorld,                //its mother  volume
+                    false,                   //no boolean operation
+                    0,                       //copy number
+                    checkOverlaps);          //overlaps checking
+
+
+// thermal_neutron_absorber
+  //  
+  G4Material* thneuabs_mat = nist->FindOrBuildMaterial("G4_A-150_TISSUE");
+  G4ThreeVector pos_thneuabs = G4ThreeVector(0, 0, (14+30+3.5+0.1/2)*cm);
+        
+  // Conical section for thermal_neutron_absorber      
+  G4double thneuabs_rmina =  0.*cm, thneuabs_rmaxb = (6+9.4/3.)*cm;
+  G4double thneuabs_rminb =  0.*cm, thneuabs_rmaxa = (6+9.5/3.)*cm;
+  G4double thneuabs_hz = (0.1/2)*cm;
+  G4double thneuabs_phimin = 0.*deg, thneuabs_phimax = 360.*deg;
+  G4Cons* solidThneuabs =    
+    new G4Cons("Thneuabs", 
+    thneuabs_rmina, thneuabs_rmaxa, thneuabs_rminb, thneuabs_rmaxb, thneuabs_hz,
+    thneuabs_phimin, thneuabs_phimax);
+                      
+  G4LogicalVolume* logicThneuabs =                         
+    new G4LogicalVolume(solidThneuabs,         //its solid
+                        thneuabs_mat,          //its material
+                        "Thneuabs");           //its name
+
+
+               
+  new G4PVPlacement(0,                       //no rotation
+                    pos_thneuabs,                    //at position
+                    logicThneuabs,             //its logical volume
+                    "Thneuabs",                //its name
                     logicWorld,                //its mother  volume
                     false,                   //no boolean operation
                     0,                       //copy number
