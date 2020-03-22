@@ -40,6 +40,10 @@
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
 
+// Eye candy headers
+#include "G4VisAttributes.hh"
+#include "G4Colour.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1DetectorConstruction::B1DetectorConstruction()
@@ -135,6 +139,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct()
     new G4LogicalVolume(solidShifter,         //its solid
                         shifter_mat,          //its material
                         "Shifter");           //its name
+  logicShifter->SetVisAttributes(new G4VisAttributes(G4Colour::Grey()));
                
   new G4PVPlacement(0,                       //no rotation
                     pos_shifter,                    //at position
@@ -194,6 +199,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct()
     new G4LogicalVolume(solidFnfilter,         //its solid
                         fnfilter_mat,          //its material
                         "Fnfilter");           //its name
+  logicFnfilter->SetVisAttributes(new G4VisAttributes(G4Colour::Yellow()));
                
   new G4PVPlacement(0,                       //no rotation
                     pos_fnfilter,                    //at position
@@ -224,6 +230,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct()
     new G4LogicalVolume(solidGrshielding,         //its solid
                         grshielding_mat,          //its material
                         "Grshielding");           //its name
+  logicGrshielding->SetVisAttributes(new G4VisAttributes(G4Colour(255/255.,183/255.,169/255.)));
 
   new G4PVPlacement(0,                       //no rotation
                     pos_grshielding,                    //at position
@@ -254,6 +261,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct()
     new G4LogicalVolume(solidThneuabs,         //its solid
                         thneuabs_mat,          //its material
                         "Thneuabs");           //its name
+  logicThneuabs->SetVisAttributes(new G4VisAttributes(G4Colour::Red()));
 
 
                
