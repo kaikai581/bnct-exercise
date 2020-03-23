@@ -182,7 +182,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct()
   //     
   // Fast_Neutron_Filter
   //  
-  G4Material* fnfilter_mat = nist->FindOrBuildMaterial("G4_A-150_TISSUE");
+  G4Material* fnfilter_mat = nist->FindOrBuildMaterial("G4_Ni"); //Ni
   G4ThreeVector pos_fnfilter = G4ThreeVector(0, 0, (14+30/2)*cm);
         
   // Conical section for fast neutron filter       
@@ -213,7 +213,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct()
 
 // Gamma_Ray_Sheilding
   //  
-  G4Material* grshielding_mat = nist->FindOrBuildMaterial("G4_A-150_TISSUE");
+  G4Material* grshielding_mat = nist->FindOrBuildMaterial("G4_Bi"); //Bi
   G4ThreeVector pos_grshielding = G4ThreeVector(0, 0, (14+30+3.5/2)*cm);
         
   // Conical section for Gamma_Ray_Sheilding       
@@ -244,7 +244,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct()
 
 // thermal_neutron_absorber
   //  
-  G4Material* thneuabs_mat = nist->FindOrBuildMaterial("G4_A-150_TISSUE");
+  G4Material* thneuabs_mat = nist->FindOrBuildMaterial("G4_Cd"); //Cd
   G4ThreeVector pos_thneuabs = G4ThreeVector(0, 0, (14+30+3.5+0.1/2)*cm);
         
   // Conical section for thermal_neutron_absorber      
