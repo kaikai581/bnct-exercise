@@ -42,14 +42,14 @@ target_link_libraries(neutron_from_target ${Geant4_LIBRARIES})
 # build NFromTarget. This is so that we can run the executable directly 
 # because it relies on these scripts being in the current working directory.
 #
-# set(NFROMTARGET_SCRIPTS
+set(NFROMTARGET_SCRIPTS
 #   projectNFromTarget.in
 #   projectNFromTarget.out
-#   init_vis.mac
+    init_vis.mac
 #   run1.mac
 #   run2.mac
-#   vis.mac
-#   )
+    vis.mac
+   )
 
 foreach(_script ${NFROMTARGET_SCRIPTS})
   configure_file(
