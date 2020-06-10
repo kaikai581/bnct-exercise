@@ -8,6 +8,7 @@
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
+class G4Tubs;
 class NDetectorMessenger;
 
 /// Detector construction class to define materials and geometry.
@@ -24,10 +25,15 @@ public:
         return detectorMessenger;
     };
 
+    void SetThickness(G4double);
+
 protected:
     G4LogicalVolume*  fScoringVolume;
 
 private:
+    G4double            fThickness;         // Thickness of the target
+    G4VPhysicalVolume*  fPhysWorld;         // The position of the target
+    G4Tubs*             fSolidTarget;       // The target solid
     NDetectorMessenger* detectorMessenger;  // pointer to the Messenger
 };
 

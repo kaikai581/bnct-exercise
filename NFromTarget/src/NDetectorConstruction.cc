@@ -4,7 +4,7 @@
 #include "NDetectorConstruction.hh"
 #include "NDetectorMessenger.hh"
 
-// #include "G4RunManager.hh"
+#include "G4RunManager.hh"
 #include "G4NistManager.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
@@ -27,7 +27,8 @@
 
 NDetectorConstruction::NDetectorConstruction()
 : G4VUserDetectorConstruction(),
-  fScoringVolume(0)
+  fScoringVolume(0),
+  fThickness(1e-6*m)
 {
     detectorMessenger = new NDetectorMessenger(this);
 }
@@ -64,40 +65,40 @@ G4VPhysicalVolume* NDetectorConstruction::Construct()
                                                       world_mat,           //its material
                                                       "World");            //its name
                                    
-    G4VPhysicalVolume* physWorld = new G4PVPlacement(0,                     //no rotation
-                                                     G4ThreeVector(),       //at (0,0,0)
-                                                     logicWorld,            //its logical volume
-                                                     "World",               //its name
-                                                     0,                     //its mother  volume
-                                                     false,                 //no boolean operation
-                                                     0,                     //copy number
-                                                     checkOverlaps);        //overlaps checking
+    fPhysWorld = new G4PVPlacement(0,                     //no rotation
+                                   G4ThreeVector(),       //at (0,0,0)
+                                   logicWorld,            //its logical volume
+                                   "World",               //its name
+                                   0,                     //its mother  volume
+                                   false,                 //no boolean operation
+                                   0,                     //copy number
+                                   checkOverlaps);        //overlaps checking
                      
  
     //     
     // The disk target
     //  
     G4Material* target_mat = nist->FindOrBuildMaterial("G4_Li");
-    G4ThreeVector target_pos = G4ThreeVector(0, 0, 0);
 
     // In micrometer. The first multiplicand is the target length in centimeter.
-    G4double targetHalfLen = 5*1e4*1e-6*m/2;
-    G4Tubs* solidTarget = new G4Tubs("SolidTarget",
-                                     0*cm,
-                                     40*cm,
-                                     targetHalfLen,
-                                     0*deg,
-                                     360*deg);
+    G4cout << "thickness of target " << fThickness << G4endl;
+    G4double targetHalfLen = fThickness/2;
+    fSolidTarget = new G4Tubs("Target",
+                              0*cm,
+                              40*cm,
+                              targetHalfLen,
+                              0*deg,
+                              360*deg);
                       
-    G4LogicalVolume* logicTarget = new G4LogicalVolume(solidTarget,         //its solid
+    G4LogicalVolume* logicTarget = new G4LogicalVolume(fSolidTarget,        //its solid
                                                        target_mat,          //its material
-                                                       "LogicTarget");      //its name
+                                                       "Target");           //its name
     logicTarget->SetVisAttributes(new G4VisAttributes(G4Colour::Grey()));
                
     new G4PVPlacement(0,                                   //no rotation
                       G4ThreeVector(0, 0, targetHalfLen),  //at position
                       logicTarget,                         //its logical volume
-                      "PhysicsTarget",                     //its name
+                      "Target",                            //its name
                       logicWorld,                          //its mother volume
                       false,                               //no boolean operation
                       0,                                   //copy number
@@ -110,5 +111,17 @@ G4VPhysicalVolume* NDetectorConstruction::Construct()
     //
     //always return the physical World
     //
-    return physWorld;
+    return fPhysWorld;
+}
+
+void NDetectorConstruction::SetThickness(G4double thickness)
+{
+    G4cout << "configured thickness " << thickness << G4endl;
+    if (fSolidTarget && fPhysWorld && thickness > 0.)
+    {
+        fSolidTarget->SetZHalfLength(thickness/2);
+        // fPosTarget->SetTranslation(G4ThreeVector(0, 0, thickness/2));
+        fPhysWorld->GetLogicalVolume()->GetDaughter(0)->SetTranslation(G4ThreeVector(0, 0, thickness/2));
+        G4RunManager::GetRunManager()->GeometryHasBeenModified();
+    }
 }

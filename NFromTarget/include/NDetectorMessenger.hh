@@ -24,13 +24,11 @@ public:
     void SetNewValue(G4UIcommand*, G4String);
     
 private:
-    NDetectorConstruction* myDetector;
+    NDetectorConstruction*     myDetector;
     
-    // G4UIdirectory*             N02Dir;
-    // G4UIdirectory*             detDir;
-    // G4UIcmdWithAString*        FGD1MatCmd;
-    // G4UIcmdWithAString*        FGD2MatCmd;
-    // G4UIcmdWithADoubleAndUnit* StepMaxCmd;    
+    G4UIdirectory*             NDir;
+    G4UIdirectory*             detDir;
+    G4UIcmdWithADoubleAndUnit* TargetLenCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

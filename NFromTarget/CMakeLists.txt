@@ -46,7 +46,7 @@ set(NFROMTARGET_SCRIPTS
 #   projectNFromTarget.in
 #   projectNFromTarget.out
     init_vis.mac
-#   run1.mac
+    run1.mac
 #   run2.mac
     vis.mac
    )
