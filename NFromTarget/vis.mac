@@ -27,6 +27,10 @@
 /vis/viewer/set/autoRefresh false
 /vis/verbose errors
 #
+# Specify the thickness of the target in micrometer
+#
+/N/det/setTargetThickness 100 um
+#
 # Draw geometry:
 /vis/drawVolume
 #
@@ -42,9 +46,9 @@
 # Draw smooth trajectories at end of event, showing trajectory points
 # as markers 2 pixels wide:
 /vis/scene/add/trajectories smooth
-/vis/modeling/trajectories/create/drawByCharge
-/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
-/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+#/vis/modeling/trajectories/create/drawByCharge
+#/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+#/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
 # (if too many tracks cause core dump => /tracking/storeTrajectory 0)
 #
 # Draw hits at end of event:
@@ -60,8 +64,9 @@
 #
 # Many other options are available with /vis/modeling and /vis/filtering.
 # For example, to select colour by particle ID:
-#/vis/modeling/trajectories/create/drawByParticleID
-#/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/drawByParticleID-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByParticleID-0/default/setStepPtsSize 2
 # To select or override default colours (note: e+ is blue by default):
 #/vis/modeling/trajectories/list
 #/vis/modeling/trajectories/drawByParticleID-0/set e+ yellow

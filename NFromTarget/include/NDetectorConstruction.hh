@@ -32,7 +32,6 @@ protected:
 
 private:
     G4double            fThickness;         // Thickness of the target
-    G4VPhysicalVolume*  fPhysWorld;         // The position of the target
     G4Tubs*             fSolidTarget;       // The target solid
     NDetectorMessenger* detectorMessenger;  // pointer to the Messenger
 };

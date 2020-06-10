@@ -65,14 +65,14 @@ G4VPhysicalVolume* NDetectorConstruction::Construct()
                                                       world_mat,           //its material
                                                       "World");            //its name
                                    
-    fPhysWorld = new G4PVPlacement(0,                     //no rotation
-                                   G4ThreeVector(),       //at (0,0,0)
-                                   logicWorld,            //its logical volume
-                                   "World",               //its name
-                                   0,                     //its mother  volume
-                                   false,                 //no boolean operation
-                                   0,                     //copy number
-                                   checkOverlaps);        //overlaps checking
+    G4VPhysicalVolume* physWorld = new G4PVPlacement(0,                     //no rotation
+                                                     G4ThreeVector(),       //at (0,0,0)
+                                                     logicWorld,            //its logical volume
+                                                     "World",               //its name
+                                                     0,                     //its mother  volume
+                                                     false,                 //no boolean operation
+                                                     0,                     //copy number
+                                                     checkOverlaps);        //overlaps checking
                      
  
     //     
@@ -111,17 +111,15 @@ G4VPhysicalVolume* NDetectorConstruction::Construct()
     //
     //always return the physical World
     //
-    return fPhysWorld;
+    return physWorld;
 }
 
 void NDetectorConstruction::SetThickness(G4double thickness)
 {
     G4cout << "configured thickness " << thickness << G4endl;
-    if (fSolidTarget && fPhysWorld && thickness > 0.)
+    if (fSolidTarget && thickness > 0.)
     {
         fSolidTarget->SetZHalfLength(thickness/2);
-        // fPosTarget->SetTranslation(G4ThreeVector(0, 0, thickness/2));
-        fPhysWorld->GetLogicalVolume()->GetDaughter(0)->SetTranslation(G4ThreeVector(0, 0, thickness/2));
         G4RunManager::GetRunManager()->GeometryHasBeenModified();
     }
 }
