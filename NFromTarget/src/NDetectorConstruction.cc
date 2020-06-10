@@ -2,6 +2,7 @@
 /// \brief Implementation of the NDetectorConstruction class
 
 #include "NDetectorConstruction.hh"
+#include "NDetectorMessenger.hh"
 
 // #include "G4RunManager.hh"
 #include "G4NistManager.hh"
@@ -27,12 +28,16 @@
 NDetectorConstruction::NDetectorConstruction()
 : G4VUserDetectorConstruction(),
   fScoringVolume(0)
-{ }
+{
+    detectorMessenger = new NDetectorMessenger(this);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 NDetectorConstruction::~NDetectorConstruction()
-{ }
+{
+    delete detectorMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -75,10 +80,12 @@ G4VPhysicalVolume* NDetectorConstruction::Construct()
     G4Material* target_mat = nist->FindOrBuildMaterial("G4_Li");
     G4ThreeVector target_pos = G4ThreeVector(0, 0, 0);
 
+    // In micrometer. The first multiplicand is the target length in centimeter.
+    G4double targetHalfLen = 5*1e4*1e-6*m/2;
     G4Tubs* solidTarget = new G4Tubs("SolidTarget",
                                      0*cm,
                                      40*cm,
-                                     10e-6*m,
+                                     targetHalfLen,
                                      0*deg,
                                      360*deg);
                       
@@ -87,14 +94,14 @@ G4VPhysicalVolume* NDetectorConstruction::Construct()
                                                        "LogicTarget");      //its name
     logicTarget->SetVisAttributes(new G4VisAttributes(G4Colour::Grey()));
                
-    new G4PVPlacement(0,                       //no rotation
-                      G4ThreeVector(0, 0, 0),  //at position
-                      logicTarget,             //its logical volume
-                      "PhysicsTarget",         //its name
-                      logicWorld,              //its mother volume
-                      false,                   //no boolean operation
-                      0,                       //copy number
-                      checkOverlaps);          //overlaps checking
+    new G4PVPlacement(0,                                   //no rotation
+                      G4ThreeVector(0, 0, targetHalfLen),  //at position
+                      logicTarget,                         //its logical volume
+                      "PhysicsTarget",                     //its name
+                      logicWorld,                          //its mother volume
+                      false,                               //no boolean operation
+                      0,                                   //copy number
+                      checkOverlaps);                      //overlaps checking
 
     // Set Shape2 as scoring volume
     //

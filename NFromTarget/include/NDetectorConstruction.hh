@@ -8,6 +8,7 @@
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
+class NDetectorMessenger;
 
 /// Detector construction class to define materials and geometry.
 class NDetectorConstruction : public G4VUserDetectorConstruction
@@ -18,8 +19,16 @@ public:
     virtual G4VPhysicalVolume* Construct();
     G4LogicalVolume* GetScoringVolume() const { return fScoringVolume; }
 
+    /// Return the detector construction messenger
+    virtual NDetectorMessenger* GetMessenger(void) {
+        return detectorMessenger;
+    };
+
 protected:
     G4LogicalVolume*  fScoringVolume;
+
+private:
+    NDetectorMessenger* detectorMessenger;  // pointer to the Messenger
 };
 
 #endif
