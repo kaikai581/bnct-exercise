@@ -23,55 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm1/include/SteppingVerbose.hh
+/// \brief Definition of the SteppingVerbose class
 //
-/// \file NSteppingAction.cc
-/// \brief Implementation of the NSteppingAction class
+//
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "NSteppingAction.hh"
-#include "NEventAction.hh"
-#include "NDetectorConstruction.hh"
+#ifndef SteppingVerbose_h
+#define SteppingVerbose_h 1
 
-#include "G4Step.hh"
-#include "G4Event.hh"
-#include "G4RunManager.hh"
-#include "G4LogicalVolume.hh"
+#include "G4SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-NSteppingAction::NSteppingAction(NEventAction* eventAction)
-: G4UserSteppingAction(),
-  fEventAction(eventAction),
-  fScoringVolume(0)
-{}
+class SteppingVerbose : public G4SteppingVerbose {
+
+public:   
+
+  SteppingVerbose();
+ ~SteppingVerbose();
+ 
+  virtual void TrackingStarted();
+  virtual void StepInfo();
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-NSteppingAction::~NSteppingAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void NSteppingAction::UserSteppingAction(const G4Step* step)
-{
-    if (!fScoringVolume) { 
-        const NDetectorConstruction* detectorConstruction
-        = static_cast<const NDetectorConstruction*>
-            (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
-        fScoringVolume = detectorConstruction->GetScoringVolume();   
-    }
-
-    // get volume of the current step
-    G4LogicalVolume* volume
-        = step->GetPreStepPoint()->GetTouchableHandle()
-        ->GetVolume()->GetLogicalVolume();
-        
-    // check if we are in scoring volume
-    if (volume != fScoringVolume) return;
-
-    // collect energy deposited in this step
-    G4double edepStep = step->GetTotalEnergyDeposit();
-    fEventAction->AddEdep(edepStep);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+#endif

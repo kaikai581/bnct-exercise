@@ -28,7 +28,7 @@
 NDetectorConstruction::NDetectorConstruction()
 : G4VUserDetectorConstruction(),
   fScoringVolume(0),
-  fThickness(1e-6*m)
+  fThickness(1*m)
 {
     detectorMessenger = new NDetectorMessenger(this);
 }
