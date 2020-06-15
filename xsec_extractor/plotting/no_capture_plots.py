@@ -24,7 +24,7 @@ def plot_all_and_ratio(df_xsec, desc, fn):
     plt.savefig(os.path.join('plots', fn))
 
 def main():
-    pLi_xsec = pd.read_csv('pLi_QGSP_BIC_HP.csv', sep=' ', skipinitialspace=True)
+    pLi_xsec = pd.read_csv('data/pLi_QGSP_BIC_HP.csv', sep=' ', skipinitialspace=True)
     # Select only records with energy larger than 0.75 MeV.
     pLi_xsec = pLi_xsec[pLi_xsec['E(MeV)'] >= .75]
     plot_all_and_ratio(pLi_xsec, 'proton cross section off Li', 'pLi_xsec.png')
