@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import os
 import pandas as pd
 
 def compare_all(df_xsec, desc, fn):
@@ -18,7 +19,7 @@ def compare_all(df_xsec, desc, fn):
     axex[1].set_xlabel('neutron kinetic energy (MeV)')
     axex[1].set_ylabel('fraction of total')
     axex[1].grid(axis='y')
-    plt.savefig(fn)
+    plt.savefig(os.path.join('plots', fn))
 
 def plot_weighted_mean(df_C, df_H, fn):
     # weight fractions
@@ -58,10 +59,10 @@ def plot_weighted_mean(df_C, df_H, fn):
 
 
 def main():
-    nC_xsec = pd.read_csv('nC_FTFP_BERT.csv', sep=' ', skipinitialspace=True)
+    nC_xsec = pd.read_csv('data/nC_FTFP_BERT.csv', sep=' ', skipinitialspace=True)
     # Select only records with energy larger than 10 MeV.
     nC_xsec = nC_xsec[nC_xsec['E(MeV)'] >= 10]
-    nH_xsec = pd.read_csv('nH_FTFP_BERT.csv', sep=' ', skipinitialspace=True)
+    nH_xsec = pd.read_csv('data/nH_FTFP_BERT.csv', sep=' ', skipinitialspace=True)
     nH_xsec = nH_xsec[nH_xsec['E(MeV)'] >= 10]
     compare_all(nH_xsec, 'neutron cross section off H', 'nH_xsec.png')
     compare_all(nC_xsec, 'neutron cross section off C', 'nC_xsec.png')
