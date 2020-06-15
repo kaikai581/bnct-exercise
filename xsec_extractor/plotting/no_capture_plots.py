@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import argparse
 import matplotlib.pyplot as plt
 import os
 import pandas as pd
@@ -23,13 +24,20 @@ def plot_all_and_ratio(df_xsec, desc, fn):
     axex[1].grid(axis='y')
     plt.savefig(os.path.join('plots', fn))
 
-def main():
-    pLi_xsec = pd.read_csv('data/pLi_QGSP_BIC_HP.csv', sep=' ', skipinitialspace=True)
+def main(infn):
+    infpn = os.path.join('data', infn)
+    pLi_xsec = pd.read_csv(infpn, sep=' ', skipinitialspace=True)
     # Select only records with energy larger than 0.75 MeV.
     pLi_xsec = pLi_xsec[pLi_xsec['E(MeV)'] >= .75]
-    plot_all_and_ratio(pLi_xsec, 'proton cross section off Li', 'pLi_xsec.png')
-    # plot_weighted_mean(nC_xsec, nH_xsec, 'weighted_mean.png')
+
+    # Determine output file pathname
+    ofn = infn.rstrip('.csv') + '_xsec.png'
+    plot_all_and_ratio(pLi_xsec, 'proton cross section off Li', ofn)
+
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i','--input', help='Input file name', default='pLi_QGSP_BIC_HP_0-50.csv')
+    args = parser.parse_args()
+    main(args.input)

@@ -76,12 +76,12 @@ HistoManager::HistoManager()
 
   fTargetMaterial = 0;
 
-  fMinKinEnergy  = 0.005*MeV;
-  fMaxKinEnergy  = 10.005*MeV;
+  fMinKinEnergy  = 0.05*MeV;
+  fMaxKinEnergy  = 50.05*MeV;
   fMinMomentum   = 1.5*MeV;
   fMaxMomentum   = 701.5*MeV;
 
-  fBinsE    = 1000;
+  fBinsE    = 500;
   fBinsP    = 700;
 }
 
