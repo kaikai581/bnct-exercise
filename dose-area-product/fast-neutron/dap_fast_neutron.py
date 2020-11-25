@@ -39,6 +39,11 @@ def fast_neutron_ratio(use_kde=True, kde_bw=kde_bandwidth):
     f_nkerma = neutron_kerma_function()
     f_nspec = neutron_spectrum_function(use_kde=use_kde, kde_bw=kde_bw)
     f_prod = lambda x: f_nkerma(x)*f_nspec(x)
+
+    # upper limit of integration
+    xmax = max(list(df_nspec['energy'])) + kde_bw
+
+    # integrate and divide
     num = integrate.quad(f_prod, 1e-2, min(xmax, 30))
     denum = integrate.quad(f_nspec, 5e-7, 1e-2)
     result = num[0]/denum[0]
@@ -128,7 +133,7 @@ def plot_weighted_kerma(use_kde=False, logy=True):
     axs[1,0].set_xlabel('Neutron energy (MeV)')
 
     # Writing results to the last subplot
-    form_str = r'$\frac{\int_{10keV}^{30MeV} F(E)K(E) \,dx}{\int_{0.5eV}^{10keV} F(E) \,dx}$'
+    form_str = r'$\frac{\int_{10keV}^{30MeV} F(E)K(E) \,dE}{\int_{0.5eV}^{10keV} F(E) \,dE}$'
     ratio = fast_neutron_ratio(use_kde=use_kde)
     axs[1,1].clear()
     axs[1,1].text(.3, .4, form_str+'\n={:.2e}'.format(ratio))
