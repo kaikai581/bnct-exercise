@@ -1,0 +1,60 @@
+ADD file:54b004357379717dfb7ea6f024ca80ce762ea4b06647fcddc0f6697146551172 in / 
+LABEL org.label-schema.schema-version=1.0 org.label-schema.name=CentOS Base Image org.label-schema.vendor=CentOS org.label-schema.license=GPLv2 org.label-schema.build-date=20181204
+CMD ["/bin/bash"]
+MAINTAINER Zoya Vallari (zoya@caltech.edu)
+/bin/sh -c yum install -y --setopt=tsflags=nodocs     wget     gcc	     gcc-c++     make  && yum -y clean all
+/bin/sh -c yum install -y --setopt=tsflags=nodocs     boost-devel     python-devel     libzip-devel     libX11-devel     libXmu-devel     libXext-devel     libXt-devel     libXpm-devel     libXft-devel     freeglut-devel  && yum -y clean all
+/bin/sh -c mkdir /opt/CMAKE/
+WORKDIR /opt/CMAKE/
+/bin/sh -c wget https://github.com/Kitware/CMake/releases/download/v3.15.0-rc4/cmake-3.15.0-rc4-Linux-x86_64.tar.gz     && tar xvf cmake-3.15.0-rc4-Linux-x86_64.tar.gz     && rm cmake-3.15.0-rc4-Linux-x86_64.tar.gz
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/CMAKE/cmake-3.15.0-rc4-Linux-x86_64/bin
+/bin/sh -c mkdir /opt/ROOT/
+WORKDIR /opt/ROOT/
+/bin/sh -c wget https://root.cern/download/root_v6.16.00.Linux-centos7-x86_64-gcc4.8.tar.gz     && tar xvf root_v6.16.00.Linux-centos7-x86_64-gcc4.8.tar.gz     && rm root_v6.16.00.Linux-centos7-x86_64-gcc4.8.tar.gz
+ENV ROOTSYS=/opt/ROOT/root
+ENV CMAKE_INCLUDE_PATH=:/opt/ROOT/root/include
+ENV CMAKE_LIBRARY_PATH=:/opt/ROOT/root/lib
+/bin/sh -c mkdir /opt/xercesC
+WORKDIR /opt/xercesC
+/bin/sh -c wget http://mirrors.ibiblio.org/apache//xerces/c/3/sources/xerces-c-3.2.2.tar.gz     && tar xvf xerces-c-3.2.2.tar.gz     &&  rm xerces-c-3.2.2.tar.gz
+/bin/sh -c mkdir /opt/xercesC/xercesC-install
+WORKDIR /opt/xercesC/xerces-c-3.2.2
+/bin/sh -c ./configure --prefix=/opt/xercesC/xercesC-install     && make     && make install
+ENV XERCESC_DIR=/opt/xercesC/xercesC-install
+ENV CMAKE_INCLUDE_PATH=:/opt/ROOT/root/include:/opt/xercesC/xercesC-install/include
+ENV CMAKE_LIBRARY_PATH=:/opt/ROOT/root/lib:/opt/xercesC/xercesC-install/lib
+/bin/sh -c mkdir /opt/Geant4
+WORKDIR /opt/Geant4
+/bin/sh -c wget http://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.05.p01.tar.gz     && tar xvf geant4.10.05.p01.tar.gz     &&  rm geant4.10.05.p01.tar.gz
+/bin/sh -c mkdir geant4-build     && mkdir geant4-install
+WORKDIR /opt/Geant4/geant4-build
+ENV GEANT4_DIR=/opt/Geant4/
+/bin/sh -c cmake -DCMAKE_INSTALL_PREFIX=${GEANT4_DIR}/geant4-install ${GEANT4_DIR}/geant4.10.05.p01     && cmake -DGEANT4_USE_OPENGL_X11=ON .     && cmake -DGEANT4_INSTALL_DATA=ON .     && cmake -DCMAKE_XERCESC_ROOT_DIR=${XERCES_DIR} .
+/bin/sh -c make -j1     && make install
+ENV GEANT4_INSTALL=/opt/Geant4/geant4-install
+ENV CMAKE_INCLUDE_PATH=:/opt/ROOT/root/include:/opt/xercesC/xercesC-install/include:/opt/Geant4/geant4-install/include
+ENV CMAKE_LIBRARY_PATH=:/opt/ROOT/root/lib:/opt/xercesC/xercesC-install/lib:/opt/Geant4/geant4-install/lib
+/bin/sh -c mkdir /opt/Geant4/geant4.10.05.p01/environments/g4py/g4py-build
+WORKDIR /opt/Geant4/geant4.10.05.p01/environments/g4py/g4py-build
+/bin/sh -c cmake ..     && make     && make install
+WORKDIR /opt
+ENV G4LEVELGAMMADATA=/opt/Geant4/geant4-install/share/Geant4-10.5.1/data/PhotonEvaporation5.3
+ENV G4LEDATA=/opt/Geant4/geant4-install/share/Geant4-10.5.1/data/G4EMLOW7.7
+ENV G4NEUTRONHPDATA=/opt/Geant4/geant4-install/share/Geant4-10.5.1/data/G4NDL4.5
+ENV G4ENSDFSTATEDATA=/opt/Geant4/geant4-install/share/Geant4-10.5.1/data/G4ENSDFSTATE2.2
+ENV G4RADIOACTIVEDATA=/opt/Geant4/geant4-install/share/Geant4-10.5.1/data/RadioactiveDecay5.3
+ENV G4ABLADATA=/opt/Geant4/geant4-install/share/Geant4-10.5.1/data/G4ABLA3.1
+ENV G4PIIDATA=/opt/Geant4/geant4-install/share/Geant4-10.5.1/data/G4PII1.3
+ENV G4PARTICLEXSDATA=/opt/Geant4/geant4-install/share/Geant4-10.5.1/data/G4PARTICLEXS1.1
+ENV G4SAIDXSDATA=/opt/Geant4/geant4-install/share/Geant4-10.5.1/data/G4SAIDDATA2.0
+ENV G4REALSURFACEDATA=/opt/Geant4/geant4-install/share/Geant4-10.5.1/data/RealSurface2.1.1
+ENV G4INCLDATA=/opt/Geant4/geant4-install/share/Geant4-10.5.1/data/G4INCL1.0
+ENV MANPATH=/opt/ROOT/root/man:
+ENV LIBPATH=/opt/ROOT/root/lib
+ENV JUPYTER_PATH=/opt/ROOT/root/etc/notebook
+ENV DYLD_LIBRARY_PATH=/opt/ROOT/root/lib
+ENV SHLIB_PATH=/opt/ROOT/root/lib
+ENV CMAKE_PREFIX_PATH=/opt/ROOT/root
+ENV LD_LIBRARY_PATH=/opt/Geant4/geant4-install/lib64:/opt/ROOT/root/lib:/opt/xercesC/xercesC-install/lib:
+ENV PATH=/opt/Geant4/geant4-install/bin:/opt/ROOT/root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/CMAKE/cmake-3.15.0-rc4-Linux-x86_64/bin
+ENV PYTHONPATH=/opt/ROOT/root/lib/:/opt/Geant4/geant4.10.05.p01/environments/g4py/lib64/:/opt/Geant4/geant4.10.05.p01/environments/g4py/lib64/examples:/opt/Geant4/geant4.10.05.p01/environments/g4py/lib64/tests
