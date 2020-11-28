@@ -36,3 +36,6 @@
 
 # VS Code config directory
 .vscode/
+
+# Setup files
+.bash_history
