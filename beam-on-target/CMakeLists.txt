@@ -2,7 +2,7 @@
 #----------------------------------------------------------------------------
 # Setup the project
 cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
-project(proton-on-beryllium)
+project(beam_on_target)
 
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
@@ -34,15 +34,15 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(neutron_from_target neutron_from_target.cc ${sources} ${headers})
-target_link_libraries(neutron_from_target ${Geant4_LIBRARIES})
+add_executable(beam_on_target beam_on_target.cc ${sources} ${headers})
+target_link_libraries(beam_on_target ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
 # build NFromTarget. This is so that we can run the executable directly 
 # because it relies on these scripts being in the current working directory.
 #
-set(NFROMTARGET_SCRIPTS
+set(BEAMONTARGET_SCRIPTS
 #   projectNFromTarget.in
 #   projectNFromTarget.out
     init_vis.mac
@@ -51,7 +51,7 @@ set(NFROMTARGET_SCRIPTS
     vis.mac
    )
 
-foreach(_script ${NFROMTARGET_SCRIPTS})
+foreach(_script ${BEAMONTARGET_SCRIPTS})
   configure_file(
     ${PROJECT_SOURCE_DIR}/${_script}
     ${PROJECT_BINARY_DIR}/${_script}
@@ -63,11 +63,11 @@ endforeach()
 # For internal Geant4 use - but has no effect if you build this
 # project standalone
 #
-add_custom_target(NFromTarget DEPENDS neutron_from_target)
+add_custom_target(g4_bot DEPENDS beam_on_target)
 
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
-install(TARGETS neutron_from_target DESTINATION bin)
+install(TARGETS beam_on_target DESTINATION bin)
 
 
