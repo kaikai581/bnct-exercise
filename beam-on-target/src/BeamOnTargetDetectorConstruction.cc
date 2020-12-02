@@ -28,7 +28,7 @@
 BeamOnTargetDetectorConstruction::BeamOnTargetDetectorConstruction()
 : G4VUserDetectorConstruction(),
   fScoringVolume(0),
-  fThickness(1*m)
+  fThickness(1000*um)
 {
     // detectorMessenger = new NDetectorMessenger(this);
 }
@@ -85,7 +85,7 @@ G4VPhysicalVolume* BeamOnTargetDetectorConstruction::Construct()
     G4double targetHalfLen = fThickness/2;
     fSolidTarget = new G4Tubs("Target",
                               0*cm,
-                              40*cm,
+                              6*cm,
                               targetHalfLen,
                               0*deg,
                               360*deg);

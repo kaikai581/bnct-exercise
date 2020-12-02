@@ -97,7 +97,7 @@ void BeamOnTargetPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
         "MyCode0002",JustWarning,msg);
     }
     
-    fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, -targetThickness/2));
+    fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, 0));
 
     fParticleGun->GeneratePrimaryVertex(anEvent);
 }
