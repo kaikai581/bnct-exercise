@@ -5,7 +5,7 @@
 #include "BeamOnTargetPrimaryGeneratorAction.hh"
 // #include "BeamOnTargetRunAction.hh"
 // #include "BeamOnTargetEventAction.hh"
-// #include "BeamOnTargetSteppingAction.hh"
+#include "BeamOnTargetSteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -38,7 +38,7 @@ void BeamOnTargetActionInitialization::Build() const
     // NEventAction* eventAction = new NEventAction(runAction);
     // SetUserAction(eventAction);
     
-    // SetUserAction(new NSteppingAction(eventAction));
+    SetUserAction(new BeamOnTargetSteppingAction);
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

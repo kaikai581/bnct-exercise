@@ -11,6 +11,7 @@
 #include "G4UIExecutive.hh"
 
 // Physics list
+#include "QGSP_BERT_HP.hh"
 #include "QGSP_BIC_HP.hh"
 
 // User headers
@@ -36,7 +37,8 @@ int main(int argc, char** argv)
     runManager->SetUserInitialization(det);
     
     // Physics list
-    G4VModularPhysicsList* physicsList = new QGSP_BIC_HP;
+    G4VModularPhysicsList* physicsList = new QGSP_BERT_HP;
+    // G4VModularPhysicsList* physicsList = new QGSP_BIC_HP;
     physicsList->SetVerboseLevel(1);
     runManager->SetUserInitialization(physicsList);
 
