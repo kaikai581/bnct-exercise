@@ -11,6 +11,7 @@
 #include "G4UIExecutive.hh"
 
 // Physics list
+#include "G4PhysListFactory.hh"
 #include "QGSP_BERT_HP.hh"
 #include "QGSP_BIC_HP.hh"
 
@@ -22,9 +23,17 @@ int main(int argc, char** argv)
 {
 #ifdef G4MULTITHREADED
     G4MTRunManager* runManager = new G4MTRunManager;
-    runManager->SetNumberOfThreads(4); // Is equal to 2 by default
+    // Number of threads can be defined via the 3rd argument
+    if (argc==4) {
+        G4int nThreads = G4UIcommand::ConvertToInt(argv[3]);
+        runManager->SetNumberOfThreads(nThreads);
+    }
+    G4cout << "##### Hadr00 started for " << runManager->GetNumberOfThreads()
+           << " threads" << " #####" << G4endl;
 #else
     G4RunManager* runManager = new G4RunManager;
+    G4cout << "##### Hadr00 started in sequential mode"
+           << " #####" << G4endl;
 #endif
 
     //*** Set mandatory initialization classes:
@@ -37,8 +46,18 @@ int main(int argc, char** argv)
     runManager->SetUserInitialization(det);
     
     // Physics list
-    G4VModularPhysicsList* physicsList = new QGSP_BERT_HP;
+    // G4VModularPhysicsList* physicsList = new QGSP_BERT_HP;
     // G4VModularPhysicsList* physicsList = new QGSP_BIC_HP;
+    G4PhysListFactory factory;
+    G4VModularPhysicsList* physicsList = nullptr;
+    G4String physName = "";
+    //Physics List name defined via the 2nd argument
+    if (argc>=3) { physName = argv[2]; }
+    //if name is not known to the factory use FTFP_BERT
+    if("" == physName || !factory.IsReferencePhysList(physName))
+        physName = "FTFP_BERT";
+    //reference PhysicsList via its name
+    physicsList = factory.GetReferencePhysList(physName);
     physicsList->SetVerboseLevel(1);
     runManager->SetUserInitialization(physicsList);
 
