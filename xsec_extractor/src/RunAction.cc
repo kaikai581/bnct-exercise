@@ -51,6 +51,9 @@ RunAction::RunAction(const DetectorConstruction* det)
   : fDetector(det)
 {
   fHisto = new HistoManager();
+  if(fDetector) {
+    fHisto->SetTargetMaterial(fDetector->GetTargetMaterial());
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

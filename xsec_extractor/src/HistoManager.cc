@@ -149,6 +149,13 @@ void HistoManager::EndOfRun()
 
   const G4Element* elm = 
     G4NistManager::Instance()->FindOrBuildElement(fElementName);
+  // Get element from the target material if specified
+  if(fTargetMaterial)
+  {
+    G4String tmpstr(fTargetMaterial->GetName());
+    fElementName = tmpstr.remove(0, 3);
+    elm = G4NistManager::Instance()->FindOrBuildElement(fElementName);
+  }
   const G4Material* mat = 
     G4NistManager::Instance()->FindOrBuildMaterial("G4_"+fElementName);
   const G4ParticleDefinition* particle = 
