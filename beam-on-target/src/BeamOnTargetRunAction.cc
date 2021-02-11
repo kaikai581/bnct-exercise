@@ -66,15 +66,24 @@ BeamOnTargetRunAction::BeamOnTargetRunAction()
     analysisManager->CreateNtupleIColumn("parent_track_id");
     analysisManager->CreateNtupleIColumn("track_id");
     analysisManager->CreateNtupleSColumn("particle_name");
-    analysisManager->CreateNtupleDColumn("rx");
-    analysisManager->CreateNtupleDColumn("ry");
-    analysisManager->CreateNtupleDColumn("rz");
-    analysisManager->CreateNtupleDColumn("rt");
+    analysisManager->CreateNtupleSColumn("process_name");
+    analysisManager->CreateNtupleDColumn("posx");
+    analysisManager->CreateNtupleDColumn("posy");
+    analysisManager->CreateNtupleDColumn("posz");
+    analysisManager->CreateNtupleDColumn("time");
     analysisManager->CreateNtupleDColumn("px");
     analysisManager->CreateNtupleDColumn("py");
     analysisManager->CreateNtupleDColumn("pz");
     analysisManager->CreateNtupleDColumn("ke");
     analysisManager->CreateNtupleDColumn("tot_e");
+    analysisManager->CreateNtupleDColumn("theta_p");
+    analysisManager->CreateNtupleDColumn("costheta_p");
+    analysisManager->CreateNtupleDColumn("dirx");
+    analysisManager->CreateNtupleDColumn("diry");
+    analysisManager->CreateNtupleDColumn("dirz");
+    analysisManager->CreateNtupleDColumn("vtxx");
+    analysisManager->CreateNtupleDColumn("vtxy");
+    analysisManager->CreateNtupleDColumn("vtxz");
     analysisManager->FinishNtuple();
 }
 

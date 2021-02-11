@@ -32,6 +32,7 @@
 #include "G4Track.hh"
 #include "G4NeutrinoE.hh"
 #include "G4RunManager.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,12 +55,35 @@ BeamOnTargetStackingAction::ClassifyNewTrack(const G4Track* track)
     //keep primary particle
     if (track->GetParentID() == 0) return fUrgent;
 
-    //kill secondary neutrino
+    // print some debug info
+    G4cout << "event: " << eid << "\tparent track: " << track->GetParentID() << "\tcurrent track: " << track->GetTrackID() << "\tparticle name: " << track->GetDefinition()->GetParticleName();
+
+    // save truth to file
     analysisManager->FillNtupleIColumn(0, eid);
     analysisManager->FillNtupleIColumn(1, track->GetParentID());
     analysisManager->FillNtupleIColumn(2, track->GetTrackID());
-    G4cout << "event: " << eid << "\tparent track: " << track->GetParentID() << "\tcurrent track: " << track->GetTrackID() << "\tparticle name: " << track->GetDefinition()->GetParticleName();
-    return fKill;
+    analysisManager->FillNtupleSColumn(3, track->GetDefinition()->GetParticleName());
+    analysisManager->FillNtupleSColumn(4, track->GetCreatorProcess()->GetProcessName());
+    analysisManager->FillNtupleDColumn(5, track->GetPosition().x()/m);
+    analysisManager->FillNtupleDColumn(6, track->GetPosition().y()/m);
+    analysisManager->FillNtupleDColumn(7, track->GetPosition().z()/m);
+    analysisManager->FillNtupleDColumn(8, track->GetGlobalTime()/s);
+    analysisManager->FillNtupleDColumn(9, track->GetMomentum().x()/MeV);
+    analysisManager->FillNtupleDColumn(10, track->GetMomentum().y()/MeV);
+    analysisManager->FillNtupleDColumn(11, track->GetMomentum().z()/MeV);
+    analysisManager->FillNtupleDColumn(12, track->GetKineticEnergy()/MeV);
+    analysisManager->FillNtupleDColumn(13, track->GetTotalEnergy()/MeV);
+    analysisManager->FillNtupleDColumn(14, track->GetMomentum().theta());
+    analysisManager->FillNtupleDColumn(15, track->GetMomentum().cosTheta());
+    analysisManager->FillNtupleDColumn(16, track->GetMomentumDirection().x());
+    analysisManager->FillNtupleDColumn(17, track->GetMomentumDirection().y());
+    analysisManager->FillNtupleDColumn(18, track->GetMomentumDirection().z());
+    analysisManager->FillNtupleDColumn(19, track->GetVertexPosition().x()/m);
+    analysisManager->FillNtupleDColumn(20, track->GetVertexPosition().y()/m);
+    analysisManager->FillNtupleDColumn(21, track->GetVertexPosition().z()/m);
+    analysisManager->AddNtupleRow();
+
+    return fUrgent;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

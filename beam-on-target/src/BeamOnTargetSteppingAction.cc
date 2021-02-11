@@ -54,9 +54,9 @@ BeamOnTargetSteppingAction::~BeamOnTargetSteppingAction()
 void BeamOnTargetSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
     // get the analysis manager to output data
-    auto analysisManager = G4AnalysisManager::Instance();
+    // auto analysisManager = G4AnalysisManager::Instance();
     // retrieve event id
-    int eid = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
+    // int eid = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
 
     const G4StepPoint* endPoint = aStep->GetPostStepPoint();
     G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();
@@ -81,20 +81,20 @@ void BeamOnTargetSteppingAction::UserSteppingAction(const G4Step* aStep)
             G4cout << G4endl;
 
             // fill the ntuple
-            analysisManager->FillNtupleIColumn(0, eid);
-            analysisManager->FillNtupleIColumn(1, (*secondary)[lp]->GetParentID());
-            analysisManager->FillNtupleIColumn(2, (*secondary)[lp]->GetTrackID());
-            analysisManager->FillNtupleSColumn(3, (*secondary)[lp]->GetDefinition()->GetParticleName());
-            analysisManager->FillNtupleDColumn(4, (*secondary)[lp]->GetPosition().x()/m);
-            analysisManager->FillNtupleDColumn(5, (*secondary)[lp]->GetPosition().y()/m);
-            analysisManager->FillNtupleDColumn(6, (*secondary)[lp]->GetPosition().z()/m);
-            analysisManager->FillNtupleDColumn(7, (*secondary)[lp]->GetLocalTime()/s);
-            analysisManager->FillNtupleDColumn(8, (*secondary)[lp]->GetMomentum().x()/MeV);
-            analysisManager->FillNtupleDColumn(9, (*secondary)[lp]->GetMomentum().y()/MeV);
-            analysisManager->FillNtupleDColumn(10, (*secondary)[lp]->GetMomentum().z()/MeV);
-            analysisManager->FillNtupleDColumn(11, (*secondary)[lp]->GetKineticEnergy()/MeV);
-            analysisManager->FillNtupleDColumn(12, (*secondary)[lp]->GetTotalEnergy()/MeV);
-            analysisManager->AddNtupleRow();
+            // analysisManager->FillNtupleIColumn(0, eid);
+            // analysisManager->FillNtupleIColumn(1, (*secondary)[lp]->GetParentID());
+            // analysisManager->FillNtupleIColumn(2, (*secondary)[lp]->GetTrackID());
+            // analysisManager->FillNtupleSColumn(3, (*secondary)[lp]->GetDefinition()->GetParticleName());
+            // analysisManager->FillNtupleDColumn(4, (*secondary)[lp]->GetPosition().x()/m);
+            // analysisManager->FillNtupleDColumn(5, (*secondary)[lp]->GetPosition().y()/m);
+            // analysisManager->FillNtupleDColumn(6, (*secondary)[lp]->GetPosition().z()/m);
+            // analysisManager->FillNtupleDColumn(7, (*secondary)[lp]->GetLocalTime()/s);
+            // analysisManager->FillNtupleDColumn(8, (*secondary)[lp]->GetMomentum().x()/MeV);
+            // analysisManager->FillNtupleDColumn(9, (*secondary)[lp]->GetMomentum().y()/MeV);
+            // analysisManager->FillNtupleDColumn(10, (*secondary)[lp]->GetMomentum().z()/MeV);
+            // analysisManager->FillNtupleDColumn(11, (*secondary)[lp]->GetKineticEnergy()/MeV);
+            // analysisManager->FillNtupleDColumn(12, (*secondary)[lp]->GetTotalEnergy()/MeV);
+            // analysisManager->AddNtupleRow();
         }
             
         G4cout << "    :------------------------------------------\n" << G4endl;
