@@ -34,6 +34,7 @@
 #include "G4RunManager.hh"
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
+#include "G4HadronicProcess.hh"
 #include "G4Proton.hh"
 #include "G4DNAGenericIonsManager.hh"
 #include "G4SystemOfUnits.hh"
@@ -56,13 +57,81 @@ void BeamOnTargetSteppingAction::UserSteppingAction(const G4Step* aStep)
     // get the analysis manager to output data
     // auto analysisManager = G4AnalysisManager::Instance();
     // retrieve event id
-    // int eid = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
+    int eid = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
 
     const G4StepPoint* endPoint = aStep->GetPostStepPoint();
     G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();
   
-    const std::vector<const G4Track*>* secondary 
-                                    = aStep->GetSecondaryInCurrentStep();
+    const std::vector<const G4Track*>* secondary = aStep->GetSecondaryInCurrentStep();
+    
+    
+    // Construct the process equation.
+    // ref: https://gitlab.cern.ch/geant4/geant4/-/blob/master/examples/extended/hadronic/Hadr03/src/SteppingAction.cc
+    G4VProcess* process = const_cast<G4VProcess*>(endPoint->GetProcessDefinedStep());
+
+    // check whether a real interaction took place (eg. not a transportation)
+    G4StepStatus stepStatus = endPoint->GetStepStatus();
+    G4bool transmit = (stepStatus == fGeomBoundary || stepStatus == fWorldBoundary);
+    if (transmit) return;
+
+    //initialisation of the nuclear channel identification
+    //
+    G4ParticleDefinition* particle = aStep->GetTrack()->GetDefinition();
+    G4String partName = particle->GetParticleName();
+    G4String nuclearChannel = partName;
+    G4HadronicProcess* hproc = dynamic_cast<G4HadronicProcess*>(process);
+    const G4Isotope* target = NULL;
+    if (hproc) target = hproc->GetTargetIsotope();
+    G4String targetName = "XXXX";  
+    if (target) targetName = target->GetName();
+    if (targetName != "XXXX")
+    {
+        nuclearChannel += " + " + targetName + " --> ";
+
+        //scattered primary particle (if any)
+        //
+        if (aStep->GetTrack()->GetTrackStatus() == fAlive)
+            nuclearChannel += partName + " + ";
+        
+        //secondaries
+        //
+        std::map<G4ParticleDefinition*, G4int> particleFlag;
+        for (size_t lp=0; lp<(*secondary).size(); lp++) {
+            particle = (*secondary)[lp]->GetDefinition(); 
+            //count e- from internal conversion together with gamma
+            if (particle == G4Electron::Electron()) particle = G4Gamma::Gamma();
+            //particle flag
+            particleFlag[particle]++;
+        }
+
+        // nuclear channel
+        const G4int kMax = 16;  
+        const G4String conver[] = {"0","","2 ","3 ","4 ","5 ","6 ","7 ","8 ","9 ",
+                                "10 ","11 ","12 ","13 ","14 ","15 ","16 "};
+        std::map<G4ParticleDefinition*, G4int>::iterator ip;               
+        for (ip = particleFlag.begin(); ip != particleFlag.end(); ip++) {
+            particle = ip->first;
+            G4String name = particle->GetParticleName();      
+            G4int nb = ip->second;
+            if (nb > kMax) nb = kMax;   
+            G4String Nb = conver[nb];    
+            if (particle == G4Gamma::Gamma()) {
+                Nb = "N ";
+                name = "gamma or e-";
+            } 
+            if (ip != particleFlag.begin()) nuclearChannel += " + ";
+            nuclearChannel += Nb + name;
+        }
+
+        // analysis manager for outputting ntuple
+        auto analysisManager = G4AnalysisManager::Instance();
+        analysisManager->FillNtupleIColumn(1, 0, eid);
+        analysisManager->FillNtupleSColumn(1, 1, nuclearChannel);
+        // When adding a row, one has to proved the correct ntuple ID.
+        // ref: https://geant4-forum.web.cern.ch/t/problem-in-saving-data-to-ntuple-at-end-of-step/3230/2
+        analysisManager->AddNtupleRow(1);
+    }
+    
     size_t nbtrk = (*secondary).size();
     if (nbtrk) {
         G4cout << "\n    :----- List of secondaries ----------------" << G4endl;
@@ -80,21 +149,6 @@ void BeamOnTargetSteppingAction::UserSteppingAction(const G4Step* aStep)
                     << G4BestUnit((*secondary)[lp]->GetGlobalTime(),"Time");
             G4cout << G4endl;
 
-            // fill the ntuple
-            // analysisManager->FillNtupleIColumn(0, eid);
-            // analysisManager->FillNtupleIColumn(1, (*secondary)[lp]->GetParentID());
-            // analysisManager->FillNtupleIColumn(2, (*secondary)[lp]->GetTrackID());
-            // analysisManager->FillNtupleSColumn(3, (*secondary)[lp]->GetDefinition()->GetParticleName());
-            // analysisManager->FillNtupleDColumn(4, (*secondary)[lp]->GetPosition().x()/m);
-            // analysisManager->FillNtupleDColumn(5, (*secondary)[lp]->GetPosition().y()/m);
-            // analysisManager->FillNtupleDColumn(6, (*secondary)[lp]->GetPosition().z()/m);
-            // analysisManager->FillNtupleDColumn(7, (*secondary)[lp]->GetLocalTime()/s);
-            // analysisManager->FillNtupleDColumn(8, (*secondary)[lp]->GetMomentum().x()/MeV);
-            // analysisManager->FillNtupleDColumn(9, (*secondary)[lp]->GetMomentum().y()/MeV);
-            // analysisManager->FillNtupleDColumn(10, (*secondary)[lp]->GetMomentum().z()/MeV);
-            // analysisManager->FillNtupleDColumn(11, (*secondary)[lp]->GetKineticEnergy()/MeV);
-            // analysisManager->FillNtupleDColumn(12, (*secondary)[lp]->GetTotalEnergy()/MeV);
-            // analysisManager->AddNtupleRow();
         }
             
         G4cout << "    :------------------------------------------\n" << G4endl;

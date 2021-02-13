@@ -39,3 +39,6 @@
 
 # Setup files
 .bash_history
+
+# data directory
+data

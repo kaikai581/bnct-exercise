@@ -61,12 +61,14 @@ BeamOnTargetRunAction::BeamOnTargetRunAction()
 
     // Creating ntuple
     //
+    // Create 1st ntuple (id = 0)
     analysisManager->CreateNtuple("secondary", "Secondary particles");
     analysisManager->CreateNtupleIColumn("event_id");
     analysisManager->CreateNtupleIColumn("parent_track_id");
     analysisManager->CreateNtupleIColumn("track_id");
     analysisManager->CreateNtupleSColumn("particle_name");
     analysisManager->CreateNtupleSColumn("process_name");
+    analysisManager->CreateNtupleIColumn("process_subtype");
     analysisManager->CreateNtupleDColumn("posx");
     analysisManager->CreateNtupleDColumn("posy");
     analysisManager->CreateNtupleDColumn("posz");
@@ -81,9 +83,12 @@ BeamOnTargetRunAction::BeamOnTargetRunAction()
     analysisManager->CreateNtupleDColumn("dirx");
     analysisManager->CreateNtupleDColumn("diry");
     analysisManager->CreateNtupleDColumn("dirz");
-    analysisManager->CreateNtupleDColumn("vtxx");
-    analysisManager->CreateNtupleDColumn("vtxy");
-    analysisManager->CreateNtupleDColumn("vtxz");
+    analysisManager->FinishNtuple();
+    // Create 2nd ntuple (id = 1)
+    //
+    analysisManager->CreateNtuple("nuclear_process", "Nuclear process the primary particle undergoes");
+    analysisManager->CreateNtupleIColumn("event_id"); // column Id = 0
+    analysisManager->CreateNtupleSColumn("equation"); // column Id = 1
     analysisManager->FinishNtuple();
 }
 

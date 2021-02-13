@@ -59,29 +59,27 @@ BeamOnTargetStackingAction::ClassifyNewTrack(const G4Track* track)
     G4cout << "event: " << eid << "\tparent track: " << track->GetParentID() << "\tcurrent track: " << track->GetTrackID() << "\tparticle name: " << track->GetDefinition()->GetParticleName();
 
     // save truth to file
-    analysisManager->FillNtupleIColumn(0, eid);
-    analysisManager->FillNtupleIColumn(1, track->GetParentID());
-    analysisManager->FillNtupleIColumn(2, track->GetTrackID());
-    analysisManager->FillNtupleSColumn(3, track->GetDefinition()->GetParticleName());
-    analysisManager->FillNtupleSColumn(4, track->GetCreatorProcess()->GetProcessName());
-    analysisManager->FillNtupleDColumn(5, track->GetPosition().x()/m);
-    analysisManager->FillNtupleDColumn(6, track->GetPosition().y()/m);
-    analysisManager->FillNtupleDColumn(7, track->GetPosition().z()/m);
-    analysisManager->FillNtupleDColumn(8, track->GetGlobalTime()/s);
-    analysisManager->FillNtupleDColumn(9, track->GetMomentum().x()/MeV);
-    analysisManager->FillNtupleDColumn(10, track->GetMomentum().y()/MeV);
-    analysisManager->FillNtupleDColumn(11, track->GetMomentum().z()/MeV);
-    analysisManager->FillNtupleDColumn(12, track->GetKineticEnergy()/MeV);
-    analysisManager->FillNtupleDColumn(13, track->GetTotalEnergy()/MeV);
-    analysisManager->FillNtupleDColumn(14, track->GetMomentum().theta());
-    analysisManager->FillNtupleDColumn(15, track->GetMomentum().cosTheta());
-    analysisManager->FillNtupleDColumn(16, track->GetMomentumDirection().x());
-    analysisManager->FillNtupleDColumn(17, track->GetMomentumDirection().y());
-    analysisManager->FillNtupleDColumn(18, track->GetMomentumDirection().z());
-    analysisManager->FillNtupleDColumn(19, track->GetVertexPosition().x()/m);
-    analysisManager->FillNtupleDColumn(20, track->GetVertexPosition().y()/m);
-    analysisManager->FillNtupleDColumn(21, track->GetVertexPosition().z()/m);
-    analysisManager->AddNtupleRow();
+    analysisManager->FillNtupleIColumn(0, 0, eid);
+    analysisManager->FillNtupleIColumn(0, 1, track->GetParentID());
+    analysisManager->FillNtupleIColumn(0, 2, track->GetTrackID());
+    analysisManager->FillNtupleSColumn(0, 3, track->GetDefinition()->GetParticleName());
+    analysisManager->FillNtupleSColumn(0, 4, track->GetCreatorProcess()->GetProcessName());
+    analysisManager->FillNtupleIColumn(0, 5, track->GetCreatorProcess()->GetProcessSubType());
+    analysisManager->FillNtupleDColumn(0, 6, track->GetPosition().x()/m);
+    analysisManager->FillNtupleDColumn(0, 7, track->GetPosition().y()/m);
+    analysisManager->FillNtupleDColumn(0, 8, track->GetPosition().z()/m);
+    analysisManager->FillNtupleDColumn(0, 9, track->GetGlobalTime()/s);
+    analysisManager->FillNtupleDColumn(0, 10, track->GetMomentum().x()/MeV);
+    analysisManager->FillNtupleDColumn(0, 11, track->GetMomentum().y()/MeV);
+    analysisManager->FillNtupleDColumn(0, 12, track->GetMomentum().z()/MeV);
+    analysisManager->FillNtupleDColumn(0, 13, track->GetKineticEnergy()/MeV);
+    analysisManager->FillNtupleDColumn(0, 14, track->GetTotalEnergy()/MeV);
+    analysisManager->FillNtupleDColumn(0, 15, track->GetMomentum().theta());
+    analysisManager->FillNtupleDColumn(0, 16, track->GetMomentum().cosTheta());
+    analysisManager->FillNtupleDColumn(0, 17, track->GetMomentumDirection().x());
+    analysisManager->FillNtupleDColumn(0, 18, track->GetMomentumDirection().y());
+    analysisManager->FillNtupleDColumn(0, 19, track->GetMomentumDirection().z());
+    analysisManager->AddNtupleRow(0);
 
     return fUrgent;
 }

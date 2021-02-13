@@ -41,7 +41,7 @@ void BeamOnTargetActionInitialization::Build() const
     // NEventAction* eventAction = new NEventAction(runAction);
     // SetUserAction(eventAction);
     
-    // SetUserAction(new BeamOnTargetSteppingAction);
+    SetUserAction(new BeamOnTargetSteppingAction);
     //***** The stacking action below leads to core dump.
     //***** Exactly same thing happens to my Geant4Py python script as well.
     SetUserAction(new BeamOnTargetStackingAction);
