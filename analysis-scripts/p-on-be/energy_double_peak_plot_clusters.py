@@ -20,22 +20,24 @@ def get_hist(ax):
 
     return n, sorted(bins)
 
-def plot_labeled_distribution_plain(vargroupname, varlist):
+def plot_labeled_distribution_plain(vargroupname, varlist, total_only=False):
     ncols = len(varlist)
     fig, axs = plt.subplots(ncols=ncols, figsize=(5*ncols, 4))
     if ncols > 1:
         for i in range(ncols):
             _, bins, _ = axs[i].hist(df[varlist[i]], histtype='step', label='total', bins='auto', linewidth=2)
-            axs[i].hist(df[df.cluster_label_se == 0][varlist[i]], histtype='stepfilled', label='cluster 0', bins=bins, alpha=.6)
-            axs[i].hist(df[df.cluster_label_se == 1][varlist[i]], histtype='stepfilled', label='cluster 1', bins=bins, alpha=.6)
-            axs[i].legend()
+            if not total_only:
+                axs[i].hist(df[df.cluster_label_se == 0][varlist[i]], histtype='stepfilled', label='cluster 0', bins=bins, alpha=.6)
+                axs[i].hist(df[df.cluster_label_se == 1][varlist[i]], histtype='stepfilled', label='cluster 1', bins=bins, alpha=.6)
+                axs[i].legend()
             axs[i].set_xlabel(vars[varlist[i]])
             axs[i].set_ylabel('count')
     else:
         _, bins, _ = axs.hist(df[varlist[0]], histtype='step', label='total', bins='auto', linewidth=2)
-        axs.hist(df[df.cluster_label_se == 0][varlist[0]], histtype='stepfilled', label='cluster 0', bins=bins, alpha=.6)
-        axs.hist(df[df.cluster_label_se == 1][varlist[0]], histtype='stepfilled', label='cluster 1', bins=bins, alpha=.6)
-        axs.legend()
+        if not total_only:
+            axs.hist(df[df.cluster_label_se == 0][varlist[0]], histtype='stepfilled', label='cluster 0', bins=bins, alpha=.6)
+            axs.hist(df[df.cluster_label_se == 1][varlist[0]], histtype='stepfilled', label='cluster 1', bins=bins, alpha=.6)
+            axs.legend()
         axs.set_xlabel(vars[varlist[0]])
         axs.set_ylabel('count')
     
@@ -44,7 +46,7 @@ def plot_labeled_distribution_plain(vargroupname, varlist):
         os.makedirs(outdir)
     
     plt.tight_layout()
-    plt.savefig(os.path.join(outdir, vargroupname + '.png'))
+    plt.savefig(os.path.join(outdir, ('total_' if total_only else '') + vargroupname + '.png'))
     plt.close()
 
     print(vargroupname, 'finished!')
@@ -108,4 +110,5 @@ if __name__ == '__main__':
     var_group['theta_p'] = ['theta_p']
     var_group['costheta_p'] = ['costheta_p']
     for vargroupname, varlist in var_group.items():
+        plot_labeled_distribution_plain(vargroupname, varlist, total_only=True)
         plot_labeled_distribution_plain(vargroupname, varlist)

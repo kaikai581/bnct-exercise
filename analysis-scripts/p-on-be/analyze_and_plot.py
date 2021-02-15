@@ -42,6 +42,29 @@ class neutron_from_target:
         Check if neutrons belong to simplified categories and designate.
         '''
         self.df_neutron['nuclear process'] = self.df_neutron['equation'].apply(self.simplify_process_categories)
+    
+    def plot_1d_distribution(self, vargroupname, varlist):
+        ncols = len(varlist)
+        _, axs = plt.subplots(ncols=ncols, figsize=(5*ncols, 4))
+        if ncols > 1:
+            for i in range(ncols):
+                sns.histplot(data=self.df_neutron, x=varlist[i], ax=axs[i], element='step')
+                axs[i].set_xlabel(vars[varlist[i]])
+                axs[i].set_ylabel('count')
+        else:
+            sns.histplot(data=self.df_neutron, x=varlist[0], ax=axs, element='step')
+            axs.set_xlabel(vars[varlist[0]])
+            axs.set_ylabel('count')
+        
+        outdir = 'plots/1d_vars'
+        if not os.path.exists(outdir):
+            os.makedirs(outdir)
+        
+        plt.tight_layout()
+        plt.savefig(os.path.join(outdir, vargroupname + '.png'))
+        plt.close()
+
+        print(vargroupname, 'finished!')
 
     def simplify_process_categories(self, eqn_str):
         '''
@@ -83,3 +106,28 @@ if __name__ == '__main__':
     sns_plot = sns.displot(ndata.df_neutron, x='ke', hue='nuclear process', element='step')
     sns_plot.set(xlabel='neutron kinetic energy (MeV)', ylabel='counts')
     sns_plot.savefig('plots/neutron_kinetic_energy_by_simplified_category.png')
+
+    # plot 1d distributions
+    vars = dict()
+    vars['track_id'] = 'neutron track ID'
+    vars['posx'] = 'neutron vertex x-component (m)'
+    vars['posy'] = 'neutron vertex y-component (m)'
+    vars['px'] = 'neutron momemtum x-component (MeV)'
+    vars['py'] = 'neutron momemtum y-component (MeV)'
+    vars['pz'] = 'neutron momemtum z-component (MeV)'
+    vars['ke'] = 'neutron kinetic energy (MeV)'
+    vars['theta_p'] = 'neutron angle with respect to beam'
+    vars['costheta_p'] = r'$\cos\theta_p$'
+    vars['dirx'] = 'neutron direction x-component'
+    vars['diry'] = 'neutron direction y-component'
+    vars['dirz'] = 'neutron direction z-component'
+    var_group = dict()
+    var_group['track_id'] = ['track_id']
+    var_group['ke'] = ['ke']
+    var_group['pos'] = ['posx', 'posy']
+    var_group['momentum'] = ['px', 'py', 'pz']
+    var_group['direction'] = ['dirx', 'diry', 'dirz']
+    var_group['theta_p'] = ['theta_p']
+    var_group['costheta_p'] = ['costheta_p']
+    for vargroupname, varlist in var_group.items():
+        ndata.plot_1d_distribution(vargroupname, varlist)
