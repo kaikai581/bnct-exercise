@@ -17,11 +17,11 @@ In order to understand what happens here, I plot neutron directions on a unit sp
 In this plot, the beam direction is from the bottom to the top. It is clearly seen that around the north pole, the event density is no where near zero. Some moments of contemplation led to the following explanation.
 
 ### The solid angle effect
-Suppose we have a uniform event distribution on a unit sphere, which means a constant number per unit area on the unit sphere. Then, the number of events <img src="https://latex.codecogs.com/svg.latex?dN" title="dN" /></a> in a solid angle <img src="https://latex.codecogs.com/svg.latex?d\Omega" title="d\Omega" /> is simply
+Suppose we have a uniform event distribution on a unit sphere, which means a constant number per unit area on the unit sphere. Then, the number of events <img src="https://latex.codecogs.com/svg.latex?dN" title="dN" /> in a solid angle <img src="https://latex.codecogs.com/svg.latex?d\Omega" title="d\Omega" /> is simply
 <p align="center" width="100%">
   <img src="https://latex.codecogs.com/svg.latex?dN=Dd\Omega" title="dN=Dd\Omega" />
 </p>
-, where <img src="https://latex.codecogs.com/svg.latex?D" title="D" /></a> is the constant event density, and <img src="https://latex.codecogs.com/svg.latex?d\Omega=\sin\theta&space;d\theta&space;d\phi" title="d\Omega=\sin\theta d\theta d\phi" />.
+, where <img src="https://latex.codecogs.com/svg.latex?D" title="D" /> is the constant event density, and <img src="https://latex.codecogs.com/svg.latex?d\Omega=\sin\theta&space;d\theta&space;d\phi" title="d\Omega=\sin\theta d\theta d\phi" />.
 
 However, when we are asking the number of events between <img src="https://latex.codecogs.com/svg.latex?\theta" title="\theta" /> and <img src="https://latex.codecogs.com/svg.latex?\theta&plus;d\theta" title="\theta+d\theta" />, due to azimuthal symmetry, we actually integrate over <img src="https://latex.codecogs.com/svg.latex?\phi" title="\phi" /> to get
 <p align="center" width="100%">
