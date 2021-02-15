@@ -64,7 +64,7 @@ class process_table:
         '''
         wrong_parents = False
         empty_daughter = False
-        parents, daughters = self.parse_equation(eqn_str)
+        parents, daughters = parse_equation(eqn_str)
 
         # test if there are parent particles other than proton and Be9
         if parents.difference(set(['proton', 'Be9'])):
@@ -76,15 +76,6 @@ class process_table:
         elastic = (parents == daughters)
         
         return wrong_parents or empty_daughter or elastic
-    
-    def parse_equation(self, eqn_str):
-        '''
-        A helper function to parse reaction equations.
-        '''
-        sides_of_eqn = eqn_str.split('-->')
-        lhs = set(map(str.strip, sides_of_eqn[0].split('+')))
-        rhs = set(map(str.strip, sides_of_eqn[1].split('+')))
-        return lhs, rhs
 
     def sort_by_event_id_frequency(self, df, ascending=False):
         '''
@@ -157,6 +148,15 @@ def get_git_root(path):
     git_repo = git.Repo(path, search_parent_directories=True)
     git_root = git_repo.git.rev_parse('--show-toplevel')
     return git_root
+
+def parse_equation(eqn_str):
+    '''
+    A helper function to parse reaction equations.
+    '''
+    sides_of_eqn = eqn_str.split('-->')
+    lhs = set(map(str.strip, sides_of_eqn[0].split('+')))
+    rhs = set(map(str.strip, sides_of_eqn[1].split('+')))
+    return lhs, rhs
 
 if __name__ == '__main__':
     # command line arguments
