@@ -10,7 +10,7 @@ So, here is the neutron angular distribution.
 </p>
 There are basically no counts around 0, the most forward going direction. This is extremely counterintuitive, since one would expect most secondary particles should start in the same direction as the beam.
 
-In order to understand what happens here, I plot neutron directions (1000 randomly sampled) on a unit sphere.
+In order to understand what happens here, I plot neutron directions (1000 neutrons randomly sampled from the simulation data) on a unit sphere.
 <p align="center" width="100%">
     <img src="plots/n_dir_sphere.png">
 </p>
