@@ -10,6 +10,7 @@ import pandas as pd
 
 # angles at which data is binned
 angles = [0., 20., 40., 60., 80., 90., 100., 120.]
+angles_equal_angle_bin = [0., 20., 40., 60., 80., 90., 100., 120., 140., 160., 180.]
 
 def get_angle_edges(angles):
     '''
@@ -31,6 +32,7 @@ if __name__ == '__main__':
     # command line arguments
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--input_file', type=str, default=os.path.join(data_utilities.get_git_root(__file__), 'data/p_on_be/pandas/neutron_preview.csv'))
+    parser.add_argument('--equal_angle_bin', action='store_true')
     args = parser.parse_args()
     infpn = args.input_file
 
@@ -39,8 +41,19 @@ if __name__ == '__main__':
     df_neutron = df_neutron[df_neutron.particle_name == 'neutron']
     df_neutron['theta_p_degree'] = df_neutron.theta_p*180/np.pi
 
-    angle_edges = get_angle_edges(angles)
+    if args.equal_angle_bin:
+        angle_edges = [0., 20., 40., 60., 80., 90., 100., 120., 140., 160., 180.]
+    else:
+        angle_edges = get_angle_edges(angles)
     
+    # if file exists, load them into the dataframe
+    outfpn = os.path.join(data_utilities.get_git_root(__file__), 'data/p_on_be/pandas/neutron_only_angle_bin.csv')
+    if os.path.exists(outfpn):
+        df_neutron = pd.read_csv(outfpn)
+
     # add binning field
-    df_neutron['angle_bin'] = pd.cut(df_neutron.theta_p_degree, angle_edges)
-    df_neutron.to_csv(os.path.join(data_utilities.get_git_root(__file__), 'data/p_on_be/pandas/neutron_only_angle_bin.csv'))
+    if args.equal_angle_bin:
+        df_neutron['angle_bin_equal_angle'] = pd.cut(df_neutron.theta_p_degree, angle_edges)
+    else:
+        df_neutron['angle_bin_equal_cos'] = pd.cut(df_neutron.theta_p_degree, angle_edges)
+    df_neutron.to_csv(outfpn)
