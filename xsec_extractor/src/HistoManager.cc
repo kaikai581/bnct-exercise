@@ -193,7 +193,7 @@ void HistoManager::EndOfRun()
   G4double de = (e2 - e1)/G4double(fBinsE);
   G4double dp = (p2 - p1)/G4double(fBinsP);
 
-  G4double x  = e1 - de*0.5; 
+  G4double x  = e1 - de*0.5;
   G4double e, p, xs, xtot;
   G4int i;
 
